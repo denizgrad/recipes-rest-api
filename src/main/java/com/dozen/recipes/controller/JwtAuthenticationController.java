@@ -1,7 +1,8 @@
 package com.dozen.recipes.controller;
 
+import com.dozen.recipes.exception.RecipesException;
 import com.dozen.recipes.model.RestErrorResponse;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -14,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-import com.dozen.recipes.service.JwtUserDetailsService;
+import com.dozen.recipes.service.impl.JwtUserDetailsService;
 
 
 import com.dozen.recipes.security.JwtTokenUtil;
@@ -22,21 +23,19 @@ import com.dozen.recipes.model.JwtRequest;
 import com.dozen.recipes.model.JwtResponse;
 import com.dozen.recipes.model.UserDto;
 
+import javax.validation.Valid;
+
 @RestController
 @CrossOrigin
-public class JwtAuthenticationController {
+@AllArgsConstructor
+public class JwtAuthenticationController extends AbstractController{
 
-	@Autowired
-	private AuthenticationManager authenticationManager;
-
-	@Autowired
-	private JwtTokenUtil jwtTokenUtil;
-
-	@Autowired
-	private JwtUserDetailsService userDetailsService;
+	private final AuthenticationManager authenticationManager;
+	private final JwtTokenUtil jwtTokenUtil;
+	private final JwtUserDetailsService userDetailsService;
 
 	@RequestMapping(value = "/authenticate", method = RequestMethod.POST)
-	public ResponseEntity<?> createAuthenticationToken(@RequestBody JwtRequest authenticationRequest) throws Exception {
+	public ResponseEntity<?> createAuthenticationToken(@RequestBody final JwtRequest authenticationRequest) throws Exception {
 
 		authenticate(authenticationRequest.getUsername(), authenticationRequest.getPassword());
 
@@ -49,12 +48,12 @@ public class JwtAuthenticationController {
 	}
 	
 	@RequestMapping(value = "/register", method = RequestMethod.POST)
-	public ResponseEntity<?> register(@RequestBody UserDto user) throws Exception {
+	public ResponseEntity<?> register(@RequestBody @Valid final UserDto user) throws Exception {
 		UserDetails userDetails = userDetailsService.loadUserByUsername(user.getUsername());
 		if(userDetails == null){
 			return ResponseEntity.ok(userDetailsService.save(user));
 		}
-		return new ResponseEntity(new RestErrorResponse(String.format("User with name : %s already exists", user.getUsername())),   HttpStatus.BAD_REQUEST);
+		throw new RecipesException(RecipesException.ALREADY_EXISTS, "User");
 	}
 
 	private void authenticate(String username, String password) throws Exception {

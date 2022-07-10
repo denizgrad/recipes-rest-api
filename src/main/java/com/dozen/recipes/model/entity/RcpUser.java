@@ -2,17 +2,15 @@ package com.dozen.recipes.model.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import javax.persistence.*;
-
+@EqualsAndHashCode(callSuper = true)
 @Entity
 @Table(name = "rcp_user")
 @Data
-public class RcpUser {
+public class RcpUser extends AbstractEntity{
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private long id;
 	@Column
 	private String username;
 	@Column

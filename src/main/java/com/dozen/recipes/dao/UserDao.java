@@ -6,7 +6,7 @@ import org.springframework.stereotype.Repository;
 import com.dozen.recipes.model.entity.RcpUser;
 
 @Repository
-public interface UserDao extends CrudRepository<RcpUser, Integer> {
+public interface UserDao extends CrudRepository<RcpUser, Long> {
 	
 	RcpUser findByUsername(String username);
 	

@@ -1,4 +1,4 @@
-package com.dozen.recipes.service;
+package com.dozen.recipes.service.impl;
 
 import java.util.ArrayList;
 
@@ -24,18 +24,23 @@ public class JwtUserDetailsService implements UserDetailsService {
 
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-		RcpUser user = userDao.findByUsername(username);
-		if (user == null) {
-			throw new UsernameNotFoundException("User not found with username: " + username);
-		}
+		RcpUser user = getRcpUserByUsername(username);
 		return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(),
 				new ArrayList<>());
 	}
-	
+
 	public RcpUser save(UserDto user) {
 		RcpUser newUser = new RcpUser();
 		newUser.setUsername(user.getUsername());
 		newUser.setPassword(bcryptEncoder.encode(user.getPassword()));
 		return userDao.save(newUser);
+	}
+
+	public RcpUser getRcpUserByUsername(String username) {
+		RcpUser user = userDao.findByUsername(username);
+		if (user == null) {
+			throw new UsernameNotFoundException("User not found with username: " + username);
+		}
+		return user;
 	}
 }
