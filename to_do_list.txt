@@ -2,6 +2,7 @@
 add logging
 add swagger doc
 pagination to all api endpoints
+create image for the application, wait_for_it.sh, and integrate with docker-compose
 validation for input for securty xss, xsforgery
 pipeline -> solar, unit tests, integration tests (from postman image), deploy
 get rid of postgres db or introduce db sharding
