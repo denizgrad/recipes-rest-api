@@ -1,4 +1,5 @@
 //to add
+so much unit tests is missing ;)
 add logging
 add swagger doc
 pagination to all api endpoints
@@ -7,6 +8,5 @@ validation for input for securty xss, xsforgery
 pipeline -> solar, unit tests, integration tests (from postman image), deploy
 get rid of postgres db or introduce db sharding
 jax-rs for spring annotations to get rid of framework dependency
-used lucene index for lfawed searches and all etc -> check this
 database versioning
 solr document create in compile time, lets have our own image!
