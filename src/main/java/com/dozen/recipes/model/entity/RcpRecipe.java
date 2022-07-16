@@ -42,4 +42,8 @@ public class RcpRecipe extends AbstractEntity{
     @Column
     @NotNull
     private Integer servings;
+
+    @Column(length = 1000)
+    @NotNull
+    private String description;
 }

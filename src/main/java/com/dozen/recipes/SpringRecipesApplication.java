@@ -6,11 +6,13 @@ import lombok.AllArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.data.solr.repository.config.EnableSolrRepositories;
 
 import java.util.Arrays;
 
 @AllArgsConstructor
 @SpringBootApplication
+@EnableSolrRepositories(basePackages = "com.dozen.recipes.dao.solr")
 public class SpringRecipesApplication implements CommandLineRunner {
     public static void main(String[] args) {
         SpringApplication.run(SpringRecipesApplication.class, args);
@@ -29,10 +31,9 @@ public class SpringRecipesApplication implements CommandLineRunner {
 		);
 		createNonVeggieIngredientsIfNotExists(
 				"Red Meat",
-				"Buter"
+				"Butter"
 		);
     }
-
 	private void createVeggieIngredientsIfNotExists(String... args) {
 		createDefaultIngredientsIfNotExists(true, args);
 
@@ -43,6 +44,8 @@ public class SpringRecipesApplication implements CommandLineRunner {
 	}
 
 	private void createDefaultIngredientsIfNotExists(boolean isVeggie, String... args) {
-		Arrays.stream(args).filter( name ->  !ingredientDao.findByName(name).isPresent());
+		Arrays.stream(args)
+				.filter( name ->  !ingredientDao.findByName(name).isPresent())
+				.forEach(name -> ingredientDao.save(new RcpIngredient(name, isVeggie, null)));
 	}
 }

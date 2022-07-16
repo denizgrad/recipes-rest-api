@@ -10,4 +10,5 @@ public interface RecipesService {
     List<RecipeDto> getAll();//pagination
     RecipeDto save(RecipeDto dto);
     RecipeDto update(RecipeDto dto);
+    List<RecipeDto> filter(String descriptionQuote, Long includes, Long excludes, Integer servings, Boolean isVeggie);
 }

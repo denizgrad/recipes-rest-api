@@ -2,6 +2,8 @@ package com.dozen.recipes.controller;
 
 import com.dozen.recipes.exception.RecipesException;
 import com.dozen.recipes.model.RestErrorResponse;
+import com.dozen.recipes.model.entity.RcpUser;
+import com.dozen.recipes.service.RcpUserService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -33,6 +35,7 @@ public class JwtAuthenticationController extends AbstractController{
 	private final AuthenticationManager authenticationManager;
 	private final JwtTokenUtil jwtTokenUtil;
 	private final JwtUserDetailsService userDetailsService;
+	private final RcpUserService rcpUserService;
 
 	@RequestMapping(value = "/authenticate", method = RequestMethod.POST)
 	public ResponseEntity<?> createAuthenticationToken(@RequestBody final JwtRequest authenticationRequest) throws Exception {
@@ -49,8 +52,8 @@ public class JwtAuthenticationController extends AbstractController{
 	
 	@RequestMapping(value = "/register", method = RequestMethod.POST)
 	public ResponseEntity<?> register(@RequestBody @Valid final UserDto user) throws Exception {
-		UserDetails userDetails = userDetailsService.loadUserByUsername(user.getUsername());
-		if(userDetails == null){
+		RcpUser rcpUser = rcpUserService.findByUserName(user.getUsername());
+		if(rcpUser == null){
 			return ResponseEntity.ok(userDetailsService.save(user));
 		}
 		throw new RecipesException(RecipesException.ALREADY_EXISTS, "User");

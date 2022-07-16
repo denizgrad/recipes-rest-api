@@ -1,0 +1,27 @@
+spring:
+  datasource:
+    initialization-mode: always
+    username: postgres
+    url: jdbc:postgresql://localhost:5432/recipesdb
+    platform: postgres
+    password: pass
+  main:
+    banner-mode: 'off'
+  data:
+    solr:
+      host: http://localhost:8983/solr
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+
+logging:
+  level:
+    org:
+      springframework: ERROR
+
+jwt:
+  secret: dozen
+
+server:
+  error:
+    include-stacktrace: never

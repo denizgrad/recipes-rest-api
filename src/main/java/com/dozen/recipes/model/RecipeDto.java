@@ -27,7 +27,7 @@ public class RecipeDto {
     @NotNull
     private Integer servings;
     @NotNull
-    private String definition;
+    private String description;
 
     public static RecipeDto mapFromEntity(RcpRecipe entity){ // mapper class using interfaces is better
         return new RecipeDto(
